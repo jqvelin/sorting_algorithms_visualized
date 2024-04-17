@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sorting_algorithms_visualized/static/css/main.5a4fed6d.css",
-    "main.js": "/sorting_algorithms_visualized/static/js/main.71d352dc.js",
+    "main.js": "/sorting_algorithms_visualized/static/js/main.8e6237a7.js",
     "static/js/453.f3e9fa54.chunk.js": "/sorting_algorithms_visualized/static/js/453.f3e9fa54.chunk.js",
     "index.html": "/sorting_algorithms_visualized/index.html",
     "main.5a4fed6d.css.map": "/sorting_algorithms_visualized/static/css/main.5a4fed6d.css.map",
-    "main.71d352dc.js.map": "/sorting_algorithms_visualized/static/js/main.71d352dc.js.map",
+    "main.8e6237a7.js.map": "/sorting_algorithms_visualized/static/js/main.8e6237a7.js.map",
     "453.f3e9fa54.chunk.js.map": "/sorting_algorithms_visualized/static/js/453.f3e9fa54.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5a4fed6d.css",
-    "static/js/main.71d352dc.js"
+    "static/js/main.8e6237a7.js"
   ]
 }
