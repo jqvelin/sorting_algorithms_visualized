@@ -96,7 +96,7 @@ const Visualizer = () => {
                         const indexOfComparedValue = elements[0]
                         const nextValue = elements[1]
                         const nextBars = [...bars]
-                        nextBars[elements[indexOfComparedValue]] = nextValue
+                        nextBars[indexOfComparedValue] = nextValue
                         return nextBars
                     })
                 } else {
