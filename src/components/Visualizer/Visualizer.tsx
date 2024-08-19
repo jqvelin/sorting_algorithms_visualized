@@ -6,8 +6,8 @@ import highlightArrayElements from '../../utilities/highlightArrayElements';
 import insertionSort from '../../algorithms/insertionSort';
 import { quickSort } from '../../algorithms/quickSort';
 import selectionSort from '../../algorithms/selectionSort';
-import FlashlightButton from '../FlashlightButton/FlashlightButton';
 import { mergeSort } from '../../algorithms/mergeSort';
+import { useFlashlightButtons } from '../../utilities/useFlashlightButtons';
 
 const COLOR_DEFAULT = ''
 const COLOR_ACCESSED = 'red'
@@ -19,6 +19,7 @@ const Visualizer = () => {
     const [bars, setBars] = useState(getPopulatedArray(50))
     const [sorterState, setSorterState] = useState<'sorting' | 'sorted' | 'ready'>('ready')
     const barContainer = useRef<null | HTMLDivElement>(null)
+    const animationTimeouts = useRef<ReturnType<typeof setTimeout>[]>([])
 
     useEffect(() => initialize(), [])
 
@@ -29,8 +30,14 @@ const Visualizer = () => {
         setSorterState('ready')
     }
 
+    function cancelSorting() {
+        animationTimeouts.current.forEach(clearTimeout)
+        initialize()
+        setSorterState("ready")
+    }
+
     function runBubbleSort(){
-        if (sorterState === 'sorting') return
+        if (sorterState === 'sorting') cancelSorting()
         if (sorterState === 'sorted') {
             initialize()
             return
@@ -41,7 +48,7 @@ const Visualizer = () => {
     }
 
     function runInsertionSort(){
-        if (sorterState === 'sorting') return
+        if (sorterState === 'sorting') cancelSorting()
         if (sorterState === 'sorted') {
             initialize()
             return
@@ -52,7 +59,7 @@ const Visualizer = () => {
     }
 
     function runQuickSort(){
-        if (sorterState === 'sorting') return
+        if (sorterState === 'sorting') cancelSorting()
         if (sorterState === 'sorted') {
             initialize()
             return
@@ -63,7 +70,7 @@ const Visualizer = () => {
     }
 
     function runSelectionSort(){
-        if (sorterState === 'sorting') return
+        if (sorterState === 'sorting') cancelSorting()
         if (sorterState === 'sorted') {
             initialize()
             return
@@ -74,7 +81,7 @@ const Visualizer = () => {
     }
 
     function runMergeSort(){
-        if (sorterState === 'sorting') return
+        if (sorterState === 'sorting') cancelSorting()
         if (sorterState === 'sorted') {
             initialize()
             return
@@ -90,7 +97,7 @@ const Visualizer = () => {
         } 
         const children = Array.from((barContainer.current.children) as HTMLCollectionOf<HTMLElement>)
         animations.forEach(([elements, areSwapped], index) => {
-            setTimeout(() => {
+            animationTimeouts.current.push(setTimeout(() => {
                 if (areSwapped){
                     setBars(bars => {
                         const indexOfComparedValue = elements[0]
@@ -104,26 +111,28 @@ const Visualizer = () => {
                         highlightArrayElements(COLOR_ACCESSED, children[element])
                     })
                 }
-            }, index * DELAY)
+            }, index * DELAY))
 
-            setTimeout(() => {
+            animationTimeouts.current.push(setTimeout(() => {
                 children.forEach((bar, i) => {
                     setTimeout(() => {
                         highlightArrayElements(COLOR_DEFAULT, bar)
                     }, i * DELAY)
                 })
-            }, index * DELAY + COMPARISON_DURATION)
+            }, index * DELAY + COMPARISON_DURATION))
         })
 
-        setTimeout(() => {
+        animationTimeouts.current.push(setTimeout(() => {
             children.forEach((bar, i) => {
                 setTimeout(() => {
                     highlightArrayElements(COLOR_SORTED, bar)
                 }, i * DELAY)
             })
             setSorterState('sorted')
-        }, animations.length * DELAY + COMPARISON_DURATION)
+        }, animations.length * DELAY + COMPARISON_DURATION))
     }
+
+    useFlashlightButtons()
 
     return (
         <div className="column">
@@ -133,11 +142,11 @@ const Visualizer = () => {
             })}
             </div>
             <div className="row">
-                <FlashlightButton handler={runBubbleSort} text="&#9658; Bubble Sort"/>
-                <FlashlightButton handler={runInsertionSort} text="&#9658; Insertion Sort"/>
-                <FlashlightButton handler={runQuickSort} text="&#9658; Quick Sort"/>
-                <FlashlightButton handler={runSelectionSort} text="&#9658; Selection Sort"/>
-                <FlashlightButton handler={runMergeSort} text="&#9658; Merge Sort"/>
+                <button className='flashlight-button' onClick={runInsertionSort}>Insertion Sort</button>
+                <button className='flashlight-button' onClick={runBubbleSort}>Bubble Sort</button>
+                <button className='flashlight-button' onClick={runQuickSort}>Quick Sort</button>
+                <button className='flashlight-button' onClick={runSelectionSort}>Selection Sort</button>
+                <button className='flashlight-button' onClick={runMergeSort}>Merge Sort</button>
             </div>
         </div>
     );
